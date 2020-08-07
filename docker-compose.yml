@@ -1,0 +1,31 @@
+version: "3"
+
+services:
+  php:
+    volumes:
+      - ./:/srv/app
+    ports:
+      # Change only
+      # vvvv
+      - 8000:80
+    depends_on:
+      - mysql
+    build:
+      context: .
+    working_dir: /srv/app/public
+    entrypoint: php -S 0.0.0.0:80 system/router.php
+    environment:
+      - DATABASE_URL=mysql://db_user:db_mysql_password@mysql:3306/db_name
+  mysql:
+    build:
+      context: .
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=db_mysql_root_password
+      - MYSQL_DATABASE=db_name
+      - MYSQL_USER=db_user
+      - MYSQL_PASSWORD=db_mysql_password
+    ports:
+      # Change only
+      # vvvvv
+      - 33061:3306
